@@ -1,0 +1,87 @@
+vyos@router3:~$ show conf
+interfaces {
+    ethernet eth0 {
+        address 43.10.34.1/24
+        address 2001:2210:34:4::2/64
+        description toAdapter3-public
+        duplex auto
+        hw-id 08:00:27:b4:98:a1
+        smp-affinity auto
+        speed auto
+    }
+    ethernet eth2 {
+        address 10.10.0.242/30
+        address 2001:2210:34:240::2/64
+        description toAdapter2-R2R3
+        duplex auto
+        hw-id 08:00:27:56:28:0c
+        smp-affinity auto
+        speed auto
+    }
+    ethernet eth3 {
+        address 10.10.0.245/30
+        address 2001:2210:34:244::3/64
+        description toAdapter1-R1R3
+        duplex auto
+        hw-id 08:00:27:5b:c8:ba
+        smp-affinity auto
+        speed auto
+    }
+    loopback lo {
+        address 10.10.0.153/32
+        address 2001:2210:34:1::153/128
+    }
+}
+nat {
+    source {
+        rule 10 {
+            outbound-interface eth0
+            source {
+                address 192.168.34.0/24
+            }
+            translation {
+                address masquerade
+...skipping...
+    }
+    https {
+        http-redirect enable
+        listen-address 10.10.0.153
+    }
+    ssh {
+        port 22
+    }
+}
+system {
+    config-management {
+        commit-revisions 100
+    }
+    console {
+        device ttyS0 {
+            speed 9600
+        }
+    }
+    host-name router3
+    login {
+        user vyos {
+            authentication {
+                encrypted-password ****************
+                plaintext-password ****************
+            }
+            level admin
+        }
+    }
+    syslog {
+        global {
+            facility all {
+                level info
+            }
+            facility protocols {
+                level debug
+            }
+        }
+    }
+    time-zone UTC
+}
+zone-policy {
+}
+vyos@router3:~$ 

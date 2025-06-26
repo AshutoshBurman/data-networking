@@ -1,0 +1,108 @@
+vyos@router1:~$ show conf
+interfaces {                                                              
+    ethernet eth0 {                                                       
+        description toAdapter1-RtoSW                                      
+        duplex auto                                                                                                                                                                          
+        hw-id 08:00:27:dc:59:9a                                                                                                                                                              
+        smp-affinity auto                                                                                                                                                                    
+        speed auto                                                                                                                                                                           
+        vif 5 {                                                                                                                                                                              
+            address 192.168.34.62/26                                                                                                                                                         
+            address 2001:2210:34:25::2/64                                                                                                                                                    
+        }                                                                                                                                                                                    
+        vif 25 {                                                                                                                                                                             
+            address 192.168.34.126/26                                                                                                                                                        
+            address 2001:2210:34:5::2/64                                                                                                                                                     
+        }                                                                                                                                                                                    
+        vif 1000 {                                                                                                                                                                           
+            address 10.10.0.1/28                                                                                                                                                             
+            address 2001:2210:34:1000::2/64                                                                                                                                                  
+        }                                                                                                                                                                                    
+    }                                                                                                                                                                                        
+    ethernet eth1 {                                                                                                                                                                          
+        address 10.10.0.254/30                                                                                                                                                               
+        address 2001:2210:34:252::1/64                                                                                                                                                       
+        description toAdapter2-RtoR                                                                                                                                                          
+        duplex auto                                                                                                                                                                          
+        hw-id 08:00:27:49:1a:53
+        smp-affinity auto
+        speed auto
+    }
+    ethernet eth2 {
+        address 10.10.0.246/30
+        address 2001:2210:34:244::2/64
+        description toAdapter3-R1R3
+        duplex auto
+        hw-id 08:00:27:05:9a:c8
+        smp-affinity auto
+        speed auto
+    }
+    loopback lo {
+        address 10.10.0.151/32
+        address 2001:2210:34:1::151/128
+    }
+}
+protocols {
+    ospf {
+        area 0 {
+            authentication md5
+            network 10.10.0.244/30
+            network 10.10.0.252/30
+            network 10.10.0.240/30
+            network 192.168.34.0/26
+            network 192.168.34.64/26
+            network 10.10.0.0/28
+            network 192.168.34.192/26
+            network 43.10.34.0/24
+            network 10.10.0.153/32
+            network 10.10.0.152/32
+            network 10.10.0.151/32
+        }
+        passive-interface 10.10.0.244/30
+        passive-interface 10.10.0.252/30
+        passive-interface 10.10.0.240/30
+    }
+...skipping...
+            }
+        }
+    }
+    https {
+        http-redirect enable
+        listen-address 10.10.0.151
+    }
+    ssh {
+        port 22
+    }
+}
+system {
+    config-management {
+        commit-revisions 100
+    }
+    console {
+        device ttyS0 {
+            speed 9600
+        }
+    }
+    host-name router1
+    login {
+        user vyos {
+            authentication {
+                encrypted-password ****************
+                plaintext-password ****************
+            }
+            level admin
+        }
+    }
+    syslog {
+        global {
+            facility all {
+                level info
+            }
+            facility protocols {
+                level debug
+            }
+        }
+    }
+    time-zone UTC
+}
+vyos@router1:~$ 

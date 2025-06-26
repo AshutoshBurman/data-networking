@@ -1,0 +1,87 @@
+vyos@router2:~$ show conf
+interfaces {
+    ethernet eth0 {
+        address 10.10.0.241/30
+        address 2001:2210:34:240::1/64
+        description toAdapter3-R2R3
+        duplex auto
+        hw-id 08:00:27:05:b4:4b
+        smp-affinity auto
+        speed auto
+    }
+    ethernet eth1 {
+        address 192.168.34.129/26
+        address 2001:2210:34:35::2/64
+        description toAdapter2-LAN4
+        duplex auto
+        hw-id 08:00:27:ba:19:cd
+        smp-affinity auto
+        speed auto
+    }
+    ethernet eth2 {
+        address 10.10.0.253/30
+        address 2001:2210:34:252::2/64
+        description toAdapter1-RtoR
+        duplex auto
+        hw-id 08:00:27:f7:85:a8
+        smp-affinity auto
+        speed auto
+    }
+    loopback lo {
+        address 10.10.0.152/32
+        address 2001:2210:34:1::152/128
+    }
+}
+protocols {
+    ospf {
+        area 0 {
+            authentication md5
+            network 10.10.0.240/30
+            network 10.10.0.252/30
+            network 10.10.0.244/30
+            network 192.168.34.64/26
+            network 192.168.34.0/26
+...skipping...
+            }
+        }
+    }
+    https {
+        http-redirect enable
+        listen-address 10.10.0.152
+    }
+    ssh {
+        port 22
+    }
+}
+system {
+    config-management {
+        commit-revisions 100
+    }
+    console {
+        device ttyS0 {
+            speed 9600
+        }
+    }
+    host-name router2
+    login {
+        user vyos {
+            authentication {
+                encrypted-password ****************
+                plaintext-password ****************
+            }
+            level admin
+        }
+    }
+    syslog {
+        global {
+            facility all {
+                level info
+            }
+            facility protocols {
+                level debug
+            }
+        }
+    }
+    time-zone UTC
+}
+vyos@router2:~$ 
